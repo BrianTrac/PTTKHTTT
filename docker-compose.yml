@@ -1,0 +1,49 @@
+services:
+  mssql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: mssql-server
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Password123!
+      - MSSQL_PID=Express
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql-data:/var/opt/mssql
+    networks:
+      - sqlnet
+    restart: unless-stopped
+
+  sql-init:
+    image: mcr.microsoft.com/mssql-tools
+    depends_on:
+      - mssql
+    container_name: mssql-init
+    entrypoint: /bin/bash
+    command: >
+      -c "
+      echo 'Waiting for SQL Server...' &&
+      sleep 15 &&
+      /opt/mssql-tools/bin/sqlcmd -S mssql -U sa -P 'Password123!' -Q 'SELECT 1' &&
+      echo 'Executing init scripts...' &&
+      for f in /scripts/*.sql; do
+        if [ -f \"\$$f\" ]; then
+          echo 'Running script:' \$$f &&
+          /opt/mssql-tools/bin/sqlcmd -S mssql -U sa -P 'Password123!' -i \"\$$f\" &&
+          echo 'Script completed:' \$$f
+        fi
+      done &&
+      echo 'All scripts executed successfully'
+      "
+    volumes:
+      - ./init:/scripts
+    networks:
+      - sqlnet
+    restart: "no"
+
+volumes:
+  mssql-data:
+
+networks:
+  sqlnet:
+    driver: bridge
