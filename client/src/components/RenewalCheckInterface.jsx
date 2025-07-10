@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Upload, X, Check } from 'lucide-react';
+import { Check } from 'lucide-react';
 
 export default function RenewalCheckInterface() {
   const [requestCode, setRequestCode] = useState('');
@@ -10,36 +10,16 @@ export default function RenewalCheckInterface() {
     requestDate: '',
     reason: ''
   });
-  const [uploadedFile, setUploadedFile] = useState(null);
   const [showNotification, setShowNotification] = useState(false);
-
-  const handleFileUpload = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      if (file.type.startsWith('image/')) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          setUploadedFile({
-            name: file.name,
-            preview: e.target.result
-          });
-        };
-        reader.readAsDataURL(file);
-      } else {
-        alert('Vui lòng chọn file ảnh!');
-      }
-    }
-  };
-
-  const handleRemoveFile = () => {
-    setUploadedFile(null);
+  const [showImageModal, setShowImageModal] = useState(false);
+  
+  // Ảnh bằng chứng có sẵn (có thể từ database hoặc API)
+  const evidenceImage = {
+    name: 'bang_chung_gia_han.jpg',
+    url: 'https://via.placeholder.com/600x400/4F46E5/FFFFFF?text=Bằng+Chứng+Gia+Hạn'
   };
 
   const handleConfirm = () => {
-    if (!uploadedFile) {
-      alert('Vui lòng upload bằng chứng!');
-      return;
-    }
     setShowNotification(true);
     setTimeout(() => setShowNotification(false), 3000);
   };
@@ -53,6 +33,14 @@ export default function RenewalCheckInterface() {
     console.log('Searching for:', requestCode);
   };
 
+  const handleViewImage = () => {
+    setShowImageModal(true);
+  };
+
+  const handleCloseModal = () => {
+    setShowImageModal(false);
+  };
+
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white">
       {/* Notification */}
@@ -61,6 +49,28 @@ export default function RenewalCheckInterface() {
           <div className="flex items-center gap-2">
             <Check className="w-5 h-5" />
             <span>Xác nhận thành công!</span>
+          </div>
+        </div>
+      )}
+
+      {/* Image Modal */}
+      {showImageModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg p-4 max-w-4xl max-h-full overflow-auto">
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-semibold text-gray-800">Bằng chứng gia hạn</h3>
+              <button
+                onClick={handleCloseModal}
+                className="text-gray-500 hover:text-gray-700 text-xl font-bold"
+              >
+                ×
+              </button>
+            </div>
+            <img
+              src={evidenceImage.url}
+              alt="Bằng chứng gia hạn"
+              className="w-full h-auto rounded-lg"
+            />
           </div>
         </div>
       )}
@@ -157,52 +167,26 @@ export default function RenewalCheckInterface() {
               />
             </div>
 
-            {/* Evidence Upload */}
+            {/* Evidence Display */}
             <div className="flex items-start">
               <label className="w-40 text-blue-600 font-semibold pt-2">
                 Bằng chứng:
               </label>
               <div className="flex-1">
-                {!uploadedFile ? (
-                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center">
-                    <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                    <p className="text-gray-500 mb-4">Click để tải lên hình ảnh</p>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleFileUpload}
-                      className="hidden"
-                      id="file-upload"
+                <div className="border border-gray-300 rounded-lg p-4 bg-gray-50">
+                  {/* Thumbnail */}
+                  <div className="w-full h-32 bg-gray-200 rounded-md overflow-hidden cursor-pointer" onClick={handleViewImage}>
+                    <img
+                      src={evidenceImage.url}
+                      alt="Bằng chứng"
+                      className="w-full h-full object-cover hover:opacity-80 transition-opacity"
                     />
-                    <label
-                      htmlFor="file-upload"
-                      className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 cursor-pointer transition-colors"
-                    >
-                      Chọn file
-                    </label>
                   </div>
-                ) : (
-                  <div className="border border-gray-300 rounded-lg p-4">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-medium text-gray-700">
-                        {uploadedFile.name}
-                      </span>
-                      <button
-                        onClick={handleRemoveFile}
-                        className="text-red-500 hover:text-red-700"
-                      >
-                        <X className="w-5 h-5" />
-                      </button>
-                    </div>
-                    <div className="w-full h-32 bg-gray-100 rounded-md flex items-center justify-center overflow-hidden">
-                      <img
-                        src={uploadedFile.preview}
-                        alt="Preview"
-                        className="max-w-full max-h-full object-contain"
-                      />
-                    </div>
-                  </div>
-                )}
+                  
+                  <p className="text-xs text-gray-500 mt-2">
+                    Click vào ảnh để xem kích thước đầy đủ
+                  </p>
+                </div>
               </div>
             </div>
           </div>
