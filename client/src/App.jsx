@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useState } from 'react'
 import ExamRegistrationPage from "./pages/ExamRegistrationPage";
+import "./index.css"; // Ensure you have Tailwind CSS imported
 
 const App = () => {
   return (
