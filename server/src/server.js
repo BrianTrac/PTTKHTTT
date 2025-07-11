@@ -10,9 +10,7 @@ const startServer = async () => {
 
 		app.listen(PORT, () => {
 			console.log(`🚀 Server đang chạy trên port ${PORT}`);
-			console.log(`📱 API endpoint: http://localhost:${PORT}/api`);
 			console.log(`🏥 Health check: http://localhost:${PORT}/api/health`);
-			console.log(`📋 Phiếu đăng ký: http://localhost:${PORT}/api/phieudangky`);
 		});
 	} catch (error) {
 		console.error("❌ Lỗi khởi động server:", error);
