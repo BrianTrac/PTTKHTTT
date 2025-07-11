@@ -1,30 +1,33 @@
-const express = require("express");
+require("dotenv").config();
+const app = require("./app");
 const { connectDatabase } = require("./utils/database");
 
-const app = express();
-
-// Middleware
-app.use(express.json());
-
-// Kết nối database
-connectDatabase();
-
-// Routes
-app.get("/", (req, res) => {
-	res.send("Welcome to the API!");
-});
-// app.use("/api/phieudangky", require("./routes/phieuDangKy"));
-
-// Start server
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-	console.log(`🚀 Server is running on port ${PORT}`);
-});
+const startServer = async () => {
+	try {
+		await connectDatabase();
 
-// Graceful shutdown
+		app.listen(PORT, () => {
+			console.log(`🚀 Server đang chạy trên port ${PORT}`);
+			console.log(`📱 API endpoint: http://localhost:${PORT}/api`);
+			console.log(`🏥 Health check: http://localhost:${PORT}/api/health`);
+			console.log(`📋 Phiếu đăng ký: http://localhost:${PORT}/api/phieudangky`);
+		});
+	} catch (error) {
+		console.error("❌ Lỗi khởi động server:", error);
+		process.exit(1);
+	}
+};
+
+startServer();
+
 process.on("SIGTERM", async () => {
 	console.log("SIGTERM received, shutting down gracefully...");
-	await closeDatabase();
+	process.exit(0);
+});
+
+process.on("SIGINT", async () => {
+	console.log("SIGINT received, shutting down gracefully...");
 	process.exit(0);
 });
