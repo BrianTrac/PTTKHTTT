@@ -1,2 +1,8 @@
-# PTTKHTTT
-This is the demo project for our PTTKHTTT web
+# Cài đặt dependencies
+npm run install:all
+
+# Chạy development
+npm run dev
+
+# Build production
+npm run build
