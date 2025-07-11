@@ -14,7 +14,14 @@ const phieuDangKyController = {
 					{
 						model: KhachHang,
 						as: "KhachHang",
-						attributes: ["MaKhachHang", "Ten", "Email", "SDT", "LoaiKhachHang"],
+						attributes: [
+							"MaKhachHang",
+							"Ten",
+							"NgaySinh",
+							"Email",
+							"SDT",
+							"LoaiKhachHang",
+						],
 					},
 					{
 						model: LichThi,
