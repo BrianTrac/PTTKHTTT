@@ -1,20 +1,34 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
+import { fetchRegistrations } from "../services/service"
 
 export default function ViewRegistrationList() {
+  const [registrationData, setRegistrationData] = useState([])
   const [searchId, setSearchId] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
   const rowsPerPage = 5
 
-  const registrationData = [
-    { id: "001", fullName: "Nguyễn Văn A", birthDate: "1/1/2004", registrationDate: "07:46:00 01-06-2025", examType: "IELTS", customerCode: "001a", status: "Chưa thanh toán", examDate: "07:46:00 15-06-2025" },
-    { id: "002", fullName: "Nguyễn Thị B", birthDate: "2/2/2002", registrationDate: "07:48:00 01-06-2025", examType: "TOEIC", customerCode: "002b", status: "Chưa thanh toán", examDate: "07:46:00 15-06-2025" },
-    { id: "003", fullName: "Nguyễn Đình H", birthDate: "3/3/2003", registrationDate: "07:50:00 01-06-2025", examType: "TOEIC", customerCode: "003h", status: "Chưa thanh toán", examDate: "07:46:00 15-06-2025" },
-    { id: "004", fullName: "Trần Thị C", birthDate: "4/4/2004", registrationDate: "07:55:00 01-06-2025", examType: "SAT", customerCode: "004c", status: "Chưa thanh toán", examDate: "07:46:00 15-06-2025" },
-    { id: "005", fullName: "Phạm Văn D", birthDate: "5/5/2001", registrationDate: "08:00:00 01-06-2025", examType: "IELTS", customerCode: "005d", status: "Đã thanh toán", examDate: "07:46:00 15-06-2025" },
-    { id: "006", fullName: "Lê Thị E", birthDate: "6/6/2002", registrationDate: "08:10:00 01-06-2025", examType: "TOEFL", customerCode: "006e", status: "Chưa thanh toán", examDate: "07:46:00 15-06-2025" },
-  ]
+  useEffect(() => {
+    const loadData = async () => {
+      const rawData = await fetchRegistrations()
+
+      const mappedData = rawData.map((item, index) => ({
+        id: item.ThiSinh?.MaThiSinh?.toString() || `fallback-${index}`,
+        fullName: item.ThiSinh?.Ten || item.KhachHang?.Ten || "Không rõ",
+        birthDate: (item.ThiSinh?.NgaySinh || item.KhachHang?.NgaySinh || "").slice(0, 10),
+        registrationDate: (item.NgayDangKy || "").replace("T", " ").slice(0, 19),
+        examType: item.LichThi?.TenLichThi || "Không rõ",
+        customerCode: item.KhachHang?.MaKhachHang?.toString() || "Không rõ",
+        status: item.TrangThaiThanhToan || "Chưa thanh toán",
+        examDate: (item.LichThi?.ThoiGianThi || "").replace("T", " ").slice(0, 19),
+      }))
+
+      setRegistrationData(mappedData)
+    }
+
+    loadData()
+  }, [])
 
   const filteredData = searchId.trim()
     ? registrationData.filter((item) =>
@@ -81,7 +95,9 @@ export default function ViewRegistrationList() {
             <tbody>
               {paginatedData.map((item, index) => (
                 <tr key={item.id} className={index % 2 === 0 ? "bg-white" : "bg-[#f1f5fa]"}>
-                  <td className="p-3 text-center border-b border-[#e0e7ef]">{item.id}</td>
+                  <td className="p-3 text-center border-b border-[#e0e7ef]">
+                    {item.id.startsWith("fallback") ? "N/A" : item.id}
+                  </td>
                   <td className="p-3 text-center border-b border-[#e0e7ef]">{item.fullName}</td>
                   <td className="p-3 text-center border-b border-[#e0e7ef]">{item.birthDate}</td>
                   <td className="p-3 text-center border-b border-[#e0e7ef]">{item.registrationDate}</td>
