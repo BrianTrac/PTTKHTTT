@@ -12,15 +12,18 @@ const PhieuDuThi = sequelize.define(
 		SoBaoDanh: {
 			type: DataTypes.STRING(20),
 			allowNull: false,
-			unique: true,
 		},
 		NgayPhatHanh: {
 			type: DataTypes.DATEONLY,
 			allowNull: false,
 		},
 		TrangThai: {
-			type: DataTypes.ENUM("Cho_thi", "Da_thi", "Khong_hop_le"),
-			defaultValue: "Cho_thi",
+			type: DataTypes.STRING(15),
+			validate: {
+				isIn: {
+					args: [["Cho_thi", "Da_thi", "Khong_hop_le"]],
+				},
+			},
 		},
 		MaPhieuDangKy: {
 			type: DataTypes.INTEGER,
@@ -42,6 +45,12 @@ const PhieuDuThi = sequelize.define(
 	{
 		tableName: "PhieuDuThi",
 		timestamps: false,
+		indexes: [
+			{
+				unique: true,
+				fields: ["SoBaoDanh"],
+			},
+		],
 	}
 );
 

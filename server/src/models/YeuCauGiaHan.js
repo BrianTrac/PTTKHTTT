@@ -26,7 +26,6 @@ const YeuCauGiaHan = sequelize.define(
 		},
 		SoLanDaGiaHan: {
 			type: DataTypes.INTEGER,
-			defaultValue: 0,
 			validate: {
 				min: 0,
 			},
@@ -36,8 +35,13 @@ const YeuCauGiaHan = sequelize.define(
 			allowNull: false,
 		},
 		TrangThai: {
-			type: DataTypes.ENUM("Cho_duyet", "Da_duyet", "Tu_choi"),
-			defaultValue: "Cho_duyet",
+			type: DataTypes.STRING(10),
+			allowNull: false,
+			validate: {
+				isIn: {
+					args: [["Cho_duyet", "Da_duyet", "Tu_choi"]],
+				},
+			},
 		},
 		MaPhieuDuThi: {
 			type: DataTypes.INTEGER,

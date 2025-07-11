@@ -19,7 +19,6 @@ const LichThi = sequelize.define(
 		},
 		SoLuongDaDangKi: {
 			type: DataTypes.INTEGER,
-			defaultValue: 0,
 		},
 		SoLuongToiThieu: {
 			type: DataTypes.INTEGER,

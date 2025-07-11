@@ -16,7 +16,6 @@ const DanhSachCho = sequelize.define(
 		SoLuong: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
-			defaultValue: 0,
 		},
 	},
 	{

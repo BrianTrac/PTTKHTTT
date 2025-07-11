@@ -18,15 +18,19 @@ const HoaDon = sequelize.define(
 		},
 		MucGiamGia: {
 			type: DataTypes.DECIMAL(5, 2),
-			defaultValue: 0,
 			validate: {
 				min: 0,
 				max: 100,
 			},
 		},
 		HinhThucThanhToan: {
-			type: DataTypes.ENUM("Tien_mat", "Chuyen_khoan", "The_tin_dung"),
+			type: DataTypes.STRING(20),
 			allowNull: false,
+			validate: {
+				isIn: {
+					args: [["Tien_mat", "Chuyen_khoan", "The_tin_dung"]],
+				},
+			},
 		},
 		NgayThanhToan: {
 			type: DataTypes.DATEONLY,
@@ -37,12 +41,15 @@ const HoaDon = sequelize.define(
 			allowNull: true,
 		},
 		TrangThai: {
-			type: DataTypes.ENUM("Chua_thanh_toan", "Da_thanh_toan", "Huy"),
-			defaultValue: "Chua_thanh_toan",
+			type: DataTypes.STRING(20),
+			validate: {
+				isIn: {
+					args: [["Chua_thanh_toan", "Da_thanh_toan", "Huy"]],
+				},
+			},
 		},
 		GiaHan: {
 			type: DataTypes.BOOLEAN,
-			defaultValue: false,
 		},
 		MaPhieuDangKy: {
 			type: DataTypes.INTEGER,

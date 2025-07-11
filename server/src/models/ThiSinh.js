@@ -20,7 +20,6 @@ const ThiSinh = sequelize.define(
 		CCCD: {
 			type: DataTypes.STRING(12),
 			allowNull: false,
-			unique: true,
 		},
 		Email: {
 			type: DataTypes.STRING(100),
@@ -40,7 +39,6 @@ const ThiSinh = sequelize.define(
 		MaPhieuDangKy: {
 			type: DataTypes.INTEGER,
 			allowNull: false,
-			unique: true,
 			references: {
 				model: "PhieuDangKy",
 				key: "MaPhieuDangKy",
@@ -50,6 +48,16 @@ const ThiSinh = sequelize.define(
 	{
 		tableName: "ThiSinh",
 		timestamps: false,
+		indexes: [
+			{
+				unique: true,
+				fields: ["Email"],
+			},
+			{
+				unique: true,
+				fields: ["MaPhieuDangKy"],
+			},
+		],
 	}
 );
 

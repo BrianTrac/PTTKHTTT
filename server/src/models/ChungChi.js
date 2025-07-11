@@ -10,8 +10,13 @@ const ChungChi = sequelize.define(
 			autoIncrement: true,
 		},
 		LoaiChungChi: {
-			type: DataTypes.ENUM("TOEIC", "IELTS", "SAT", "GRE", "GMAT"),
+			type: DataTypes.STRING(10),
 			allowNull: false,
+			validate: {
+				isIn: {
+					args: [["TOEIC", "IELTS", "SAT", "GRE", "GMAT"]],
+				},
+			},
 		},
 		NgayCap: {
 			type: DataTypes.DATEONLY,
@@ -22,8 +27,12 @@ const ChungChi = sequelize.define(
 			allowNull: true,
 		},
 		TrangThai: {
-			type: DataTypes.ENUM("Da_cap", "Da_nhan", "Bi_thu_hoi"),
-			defaultValue: "Da_cap",
+			type: DataTypes.STRING(15),
+			validate: {
+				isIn: {
+					args: [["Da_cap", "Da_nhan", "Bi_thu_hoi"]],
+				},
+			},
 		},
 		MaKetQua: {
 			type: DataTypes.INTEGER,

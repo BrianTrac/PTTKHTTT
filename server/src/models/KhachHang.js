@@ -16,7 +16,6 @@ const KhachHang = sequelize.define(
 		Email: {
 			type: DataTypes.STRING(100),
 			allowNull: false,
-			unique: true,
 			validate: {
 				isEmail: true,
 			},
@@ -36,16 +35,30 @@ const KhachHang = sequelize.define(
 		CCCD: {
 			type: DataTypes.STRING(12),
 			allowNull: true,
-			unique: true,
 		},
 		LoaiKhachHang: {
-			type: DataTypes.ENUM("Tu_Do", "Don_Vi"),
-			defaultValue: "Tu_Do",
+			type: DataTypes.STRING(10),
+			allowNull: false,
+			validate: {
+				isIn: {
+					args: [["Tu_Do", "Don_Vi"]],
+				},
+			},
 		},
 	},
 	{
 		tableName: "KhachHang",
 		timestamps: false,
+		indexes: [
+			{
+				unique: true,
+				fields: ["Email"],
+			},
+			{
+				unique: true,
+				fields: ["CCCD"],
+			},
+		],
 	}
 );
 

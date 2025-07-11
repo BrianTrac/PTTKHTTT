@@ -1,6 +1,5 @@
 const sequelize = require("../config/database");
 
-// Import all models
 const KhachHang = require("./KhachHang");
 const NhanVien = require("./NhanVien");
 const DonViChamThi = require("./DonViChamThi");
@@ -16,16 +15,13 @@ const ChungChi = require("./ChungChi");
 const YeuCauGiaHan = require("./YeuCauGiaHan");
 const LichThi_NhanVienCoiThi = require("./LichThi_NhanVienCoiThi");
 
-// Define associations
 const defineAssociations = () => {
-	// KhachHang relationships
 	KhachHang.hasMany(PhieuDangKy, {
 		foreignKey: "MaKhachHang",
 		as: "PhieuDangKy",
 	});
 	KhachHang.hasMany(ThiSinh, { foreignKey: "MaKhachHang", as: "ThiSinh" });
 
-	// NhanVien relationships
 	NhanVien.hasMany(PhieuDangKy, {
 		foreignKey: "MaNhanVien",
 		as: "PhieuDangKy",
@@ -35,11 +31,9 @@ const defineAssociations = () => {
 		as: "YeuCauGiaHan",
 	});
 
-	// LichThi relationships
 	LichThi.hasMany(PhongThi, { foreignKey: "MaLichThi", as: "PhongThi" });
 	LichThi.hasMany(PhieuDangKy, { foreignKey: "MaLichThi", as: "PhieuDangKy" });
 
-	// Many-to-many: LichThi - NhanVien (coi thi)
 	LichThi.belongsToMany(NhanVien, {
 		through: LichThi_NhanVienCoiThi,
 		foreignKey: "MaLichThi",
@@ -54,10 +48,8 @@ const defineAssociations = () => {
 		as: "LichThiCoiThi",
 	});
 
-	// PhongThi relationships
 	PhongThi.belongsTo(LichThi, { foreignKey: "MaLichThi", as: "LichThi" });
 
-	// PhieuDangKy relationships
 	PhieuDangKy.belongsTo(KhachHang, {
 		foreignKey: "MaKhachHang",
 		as: "KhachHang",
@@ -71,7 +63,6 @@ const defineAssociations = () => {
 		as: "PhieuDuThi",
 	});
 
-	// ThiSinh relationships
 	ThiSinh.belongsTo(KhachHang, { foreignKey: "MaKhachHang", as: "KhachHang" });
 	ThiSinh.belongsTo(PhieuDangKy, {
 		foreignKey: "MaPhieuDangKy",
@@ -79,13 +70,11 @@ const defineAssociations = () => {
 	});
 	ThiSinh.hasMany(PhieuDuThi, { foreignKey: "MaThiSinh", as: "PhieuDuThi" });
 
-	// HoaDon relationships
 	HoaDon.belongsTo(PhieuDangKy, {
 		foreignKey: "MaPhieuDangKy",
 		as: "PhieuDangKy",
 	});
 
-	// PhieuDuThi relationships
 	PhieuDuThi.belongsTo(PhieuDangKy, {
 		foreignKey: "MaPhieuDangKy",
 		as: "PhieuDangKy",
@@ -100,7 +89,6 @@ const defineAssociations = () => {
 		as: "YeuCauGiaHan",
 	});
 
-	// KetQuaThi relationships
 	KetQuaThi.belongsTo(PhieuDuThi, {
 		foreignKey: "MaPhieuDuThi",
 		as: "PhieuDuThi",
@@ -111,16 +99,13 @@ const defineAssociations = () => {
 	});
 	KetQuaThi.hasMany(ChungChi, { foreignKey: "MaKetQua", as: "ChungChi" });
 
-	// ChungChi relationships
 	ChungChi.belongsTo(KetQuaThi, { foreignKey: "MaKetQua", as: "KetQuaThi" });
 
-	// DonViChamThi relationships
 	DonViChamThi.hasMany(KetQuaThi, {
 		foreignKey: "MaDonViChamThi",
 		as: "KetQuaThi",
 	});
 
-	// YeuCauGiaHan relationships
 	YeuCauGiaHan.belongsTo(PhieuDuThi, {
 		foreignKey: "MaPhieuDuThi",
 		as: "PhieuDuThi",
@@ -134,17 +119,14 @@ const defineAssociations = () => {
 		as: "DanhSachCho",
 	});
 
-	// DanhSachCho relationships
 	DanhSachCho.hasMany(YeuCauGiaHan, {
 		foreignKey: "MaDanhSachCho",
 		as: "YeuCauGiaHan",
 	});
 };
 
-// Initialize associations
 defineAssociations();
 
-// Export all models and sequelize instance
 module.exports = {
 	sequelize,
 	KhachHang,

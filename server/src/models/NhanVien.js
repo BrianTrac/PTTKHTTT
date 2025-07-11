@@ -10,13 +10,20 @@ const NhanVien = sequelize.define(
 			autoIncrement: true,
 		},
 		VaiTro: {
-			type: DataTypes.ENUM(
-				"Quan_ly",
-				"Nhan_vien_tiep_nhan",
-				"Nhan_vien_cham_thi",
-				"Nhan_vien_coi_thi"
-			),
+			type: DataTypes.STRING(25),
 			allowNull: false,
+			validate: {
+				isIn: {
+					args: [
+						[
+							"Quan_ly",
+							"Nhan_vien_tiep_nhan",
+							"Nhan_vien_cham_thi",
+							"Nhan_vien_coi_thi",
+						],
+					],
+				},
+			},
 		},
 		HoTen: {
 			type: DataTypes.STRING(100),
@@ -25,7 +32,6 @@ const NhanVien = sequelize.define(
 		Email: {
 			type: DataTypes.STRING(100),
 			allowNull: false,
-			unique: true,
 			validate: {
 				isEmail: true,
 			},
@@ -38,6 +44,12 @@ const NhanVien = sequelize.define(
 	{
 		tableName: "NhanVien",
 		timestamps: false,
+		indexes: [
+			{
+				unique: true,
+				fields: ["Email"],
+			},
+		],
 	}
 );
 
