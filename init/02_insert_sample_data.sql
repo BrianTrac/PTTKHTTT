@@ -127,26 +127,26 @@ GO
 INSERT INTO HoaDon (SoTien, MucGiamGia, HinhThucThanhToan, NgayThanhToan, MaThanhToan, TrangThai, GiaHan, MaPhieuDangKy) VALUES
 -- TOEIC exam fees
 (615000.00, 0.00, 'Chuyen_khoan', '2025-07-01', 'TXN001', 'Da_thanh_toan', 0, 1),
-(615000.00, 5.00, 'The_tin_dung', '2025-07-02', 'TXN002', 'Da_thanh_toan', 0, 2),
+(615000.00, 0.00, 'The_tin_dung', '2025-07-02', 'TXN002', 'Da_thanh_toan', 0, 2),
 (615000.00, 0.00, 'Tien_mat', '2025-07-03', 'TXN003', 'Da_thanh_toan', 0, 3),
-(615000.00, 10.00, 'Chuyen_khoan', '2025-07-04', 'TXN004', 'Da_thanh_toan', 0, 4),
+(615000.00, 0.00, 'Chuyen_khoan', '2025-07-04', 'TXN004', 'Da_thanh_toan', 0, 4),
 (615000.00, 0.00, 'The_tin_dung', '2025-07-05', 'TXN005', 'Da_thanh_toan', 0, 5),
 -- IELTS exam fees
 (5400000.00, 0.00, 'Chuyen_khoan', '2025-07-06', 'TXN006', 'Da_thanh_toan', 0, 6),
-(5400000.00, 3.00, 'The_tin_dung', '2025-07-07', 'TXN007', 'Da_thanh_toan', 0, 7),
+(5400000.00, 0.00, 'The_tin_dung', '2025-07-07', 'TXN007', 'Da_thanh_toan', 0, 7),
 (5400000.00, 0.00, 'Chuyen_khoan', '2025-07-08', 'TXN008', 'Da_thanh_toan', 0, 8),
-(5400000.00, 5.00, 'Tien_mat', '2025-07-09', 'TXN009', 'Da_thanh_toan', 0, 9),
+(5400000.00, 10.00, 'Tien_mat', '2025-07-09', 'TXN009', 'Da_thanh_toan', 0, 9),
 -- SAT exam fees
 (1350000.00, 0.00, 'Chuyen_khoan', '2025-07-10', 'TXN010', 'Da_thanh_toan', 0, 10),
-(1350000.00, 8.00, 'The_tin_dung', '2025-07-11', 'TXN011', 'Da_thanh_toan', 0, 11),
+(1350000.00, 0.00, 'The_tin_dung', '2025-07-11', 'TXN011', 'Da_thanh_toan', 0, 11),
 (1350000.00, 0.00, 'Tien_mat', '2025-07-12', 'TXN012', 'Da_thanh_toan', 0, 12),
 -- GRE exam fees
 (5100000.00, 0.00, 'Chuyen_khoan', '2025-07-13', 'TXN013', 'Da_thanh_toan', 0, 13),
-(5100000.00, 2.00, 'The_tin_dung', '2025-07-14', 'TXN014', 'Da_thanh_toan', 0, 14),
+(5100000.00, 0.00, 'The_tin_dung', '2025-07-14', 'TXN014', 'Da_thanh_toan', 0, 14),
 (5100000.00, 0.00, 'Chuyen_khoan', '2025-07-15', 'TXN015', 'Da_thanh_toan', 0, 15),
 -- GMAT exam fees
 (6750000.00, 0.00, 'Chuyen_khoan', '2025-07-16', 'TXN016', 'Da_thanh_toan', 0, 16),
-(6750000.00, 7.00, 'The_tin_dung', '2025-07-17', 'TXN017', 'Da_thanh_toan', 0, 17),
+(6750000.00, 0.00, 'The_tin_dung', '2025-07-17', 'TXN017', 'Da_thanh_toan', 0, 17),
 -- Pending/cancelled payments
 (615000.00, 0.00, 'Chuyen_khoan', '2025-07-18', 'TXN018', 'Chua_thanh_toan', 0, 18),
 (5400000.00, 0.00, 'The_tin_dung', '2025-07-19', 'TXN019', 'Huy', 0, 19),
