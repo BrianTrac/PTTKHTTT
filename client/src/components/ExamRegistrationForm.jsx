@@ -22,10 +22,16 @@ export default function ExamRegistrationForm() {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form submitted:", formData);
-    alert("Đã lưu thông tin thành công!");
+  e.preventDefault();
+  // Chuyển examType sang chữ hoa trước khi gửi
+  const dataToSend = {
+    ...formData,
+    examType: formData.examType.toUpperCase(),
   };
+  console.log("Form submitted:", dataToSend);
+  alert("Đã lưu thông tin thành công!");
+  // Nếu có gửi API thì dùng dataToSend thay vì formData
+};
 
   return (
     <div
