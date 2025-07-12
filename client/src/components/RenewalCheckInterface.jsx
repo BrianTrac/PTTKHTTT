@@ -168,7 +168,7 @@ export default function RenewalCheckInterface() {
               <input
                 type="text"
                 value={projectInfo.code}
-                onChange={e => setProjectInfo(prev => ({ ...prev, code: e.target.value }))}
+                readOnly
                 className="flex-1 px-4 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-600"
               />
             </div>
@@ -181,7 +181,7 @@ export default function RenewalCheckInterface() {
               <input
                 type="text"
                 value={projectInfo.price}
-                onChange={e => setProjectInfo(prev => ({ ...prev, price: e.target.value }))}
+                readOnly
                 className="flex-1 px-4 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-600"
               />
             </div>
@@ -194,7 +194,7 @@ export default function RenewalCheckInterface() {
               <input
                 type="text"
                 value={projectInfo.extensions}
-                onChange={e => setProjectInfo(prev => ({ ...prev, extensions: e.target.value }))}
+                readOnly
                 className="flex-1 px-4 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-600"
               />
             </div>
@@ -207,7 +207,7 @@ export default function RenewalCheckInterface() {
               <input
                 type="date"
                 value={projectInfo.requestDate}
-                onChange={e => setProjectInfo(prev => ({ ...prev, requestDate: e.target.value }))}
+                readOnly
                 className="flex-1 px-4 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-600"
               />
             </div>
@@ -220,7 +220,7 @@ export default function RenewalCheckInterface() {
               <input
                 type="text"
                 value={projectInfo.reason}
-                onChange={e => setProjectInfo(prev => ({ ...prev, reason: e.target.value }))}
+                readOnly
                 className="flex-1 px-4 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-600"
               />
             </div>
