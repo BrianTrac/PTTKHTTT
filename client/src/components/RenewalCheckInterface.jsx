@@ -13,25 +13,83 @@ export default function RenewalCheckInterface() {
   const [showNotification, setShowNotification] = useState(false);
   const [showImageModal, setShowImageModal] = useState(false);
   
-  // Ảnh bằng chứng có sẵn (có thể từ database hoặc API)
-  const evidenceImage = {
-    name: 'bang_chung_gia_han.jpg',
-    url: 'https://via.placeholder.com/600x400/4F46E5/FFFFFF?text=Bằng+Chứng+Gia+Hạn'
-  };
+  const [evidenceImage, setEvidenceImage] = useState({
+  name: '',
+  url: ''
+});
 
-  const handleConfirm = () => {
-    setShowNotification(true);
-    setTimeout(() => setShowNotification(false), 3000);
-  };
-
-  const handleSearch = () => {
-    if (!requestCode.trim()) {
-      alert('Vui lòng nhập mã yêu cầu!');
-      return;
+  const handleConfirm = async () => {
+  if (!requestCode.trim()) {
+    alert("Vui lòng nhập mã yêu cầu!");
+    return;
+  }
+  try {
+    const res = await fetch("http://localhost:5000/api/yeucaugiahan/confirm", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ MaYeuCau: Number(requestCode) }),
+    });
+    const json = await res.json();
+    if (json.success) {
+      setShowNotification(true);
+      setTimeout(() => setShowNotification(false), 3000);
+      // Cập nhật lại thông tin nếu muốn
+      if (json.data) {
+        setProjectInfo((prev) => ({
+          ...prev,
+          extensions: json.data.SoLanDaGiaHan?.toString() || prev.extensions,
+        }));
+      }
+    } else {
+      alert(json.message || "Xác nhận thất bại!");
     }
-    // Simulate search - in real app, this would call an API
-    console.log('Searching for:', requestCode);
-  };
+  } catch (err) {
+    alert("Lỗi khi xác nhận!");
+    console.error(err);
+  }
+};
+
+  const handleSearch = async () => {
+  if (!requestCode.trim()) {
+    alert('Vui lòng nhập mã yêu cầu!');
+    return;
+  }
+  try {
+    const res = await fetch(`http://localhost:5000/api/yeucaugiahan/${requestCode}`);
+    const json = await res.json();
+    if (json.success && json.data) {
+      setProjectInfo({
+        code: json.data.MaPhieuDuThi || '',
+        price: json.data.PhiGiaHan?.toLocaleString() || '',
+        extensions: json.data.SoLanDaGiaHan?.toString() || '',
+        requestDate: json.data.NgayYeuCau || '',
+        reason: json.data.LyDo || ''
+      });
+      setEvidenceImage({
+        name: 'bang_chung_gia_han.jpg',
+        url: json.data.BangChung || 'https://via.placeholder.com/600x400/4F46E5/FFFFFF?text=Bằng+Chứng+Gia+Hạn'
+      });
+    } else {
+      alert("Không tìm thấy yêu cầu gia hạn này!");
+      setProjectInfo({
+        code: '',
+        price: '',
+        extensions: '',
+        requestDate: '',
+        reason: ''
+      });
+      setEvidenceImage({
+        name: '',
+        url: ''
+      });
+    }
+  } catch (err) {
+    alert("Lỗi khi lấy dữ liệu!");
+    console.error(err);
+  }
+};
 
   const handleViewImage = () => {
     setShowImageModal(true);
@@ -110,7 +168,7 @@ export default function RenewalCheckInterface() {
               <input
                 type="text"
                 value={projectInfo.code}
-                readOnly
+                onChange={e => setProjectInfo(prev => ({ ...prev, code: e.target.value }))}
                 className="flex-1 px-4 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-600"
               />
             </div>
@@ -123,7 +181,7 @@ export default function RenewalCheckInterface() {
               <input
                 type="text"
                 value={projectInfo.price}
-                readOnly
+                onChange={e => setProjectInfo(prev => ({ ...prev, price: e.target.value }))}
                 className="flex-1 px-4 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-600"
               />
             </div>
@@ -136,7 +194,7 @@ export default function RenewalCheckInterface() {
               <input
                 type="text"
                 value={projectInfo.extensions}
-                readOnly
+                onChange={e => setProjectInfo(prev => ({ ...prev, extensions: e.target.value }))}
                 className="flex-1 px-4 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-600"
               />
             </div>
@@ -147,9 +205,9 @@ export default function RenewalCheckInterface() {
                 Ngày yêu cầu:
               </label>
               <input
-                type="text"
+                type="date"
                 value={projectInfo.requestDate}
-                readOnly
+                onChange={e => setProjectInfo(prev => ({ ...prev, requestDate: e.target.value }))}
                 className="flex-1 px-4 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-600"
               />
             </div>
@@ -162,7 +220,7 @@ export default function RenewalCheckInterface() {
               <input
                 type="text"
                 value={projectInfo.reason}
-                readOnly
+                onChange={e => setProjectInfo(prev => ({ ...prev, reason: e.target.value }))}
                 className="flex-1 px-4 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-600"
               />
             </div>
