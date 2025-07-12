@@ -15,22 +15,16 @@ export default function CertificateSearchForm() {
 
   const certificateTypes = [
     'IELTS',
-    'TOEFL',
     'TOEIC',
-    'Cambridge',
-    'PTE',
     'SAT',
-    'ACT',
     'GRE',
     'GMAT'
   ];
 
   const statusOptions = [
-    'DAGUI',
-    'CHUAGUI',
-    'DANHAN',
-    'HIEULUC',
-    'HETHAN'
+    'Da_cap',
+    'Da_nhan',
+    'Bi_thu_hoi'
   ];
 
   const handleInputChange = (e) => {
@@ -41,15 +35,69 @@ export default function CertificateSearchForm() {
     }));
   };
 
-  const handleSearch = () => {
-    console.log('Tìm kiếm với dữ liệu:', formData);
-    // Xử lý logic tìm kiếm ở đây
-  };
+  const handleSearch = async () => {
+  if (!formData.studentId) {
+    alert("Vui lòng nhập mã thí sinh!");
+    return;
+  }
+  try {
+    const res = await fetch(`http://localhost:5000/api/thisinhs/${formData.studentId}/chungchis`);
+    const json = await res.json();
+    if (json.success && json.data && json.data.length > 0) {
+      const cc = json.data[0];
+      setFormData(prev => ({
+        ...prev,
+        certificateCode: cc.MaChungChi || "",
+        certificateType: cc.LoaiChungChi || "",
+        issueDate: cc.NgayCap || "",
+        receiveDate: cc.NgayNhan || "",
+        status: cc.TrangThai || "",
+        score: cc.Diem?.toString() || "",
+        publishDate: cc.NgayCongBo || ""
+      }));
+    } else {
+      alert("Không tìm thấy chứng chỉ cho thí sinh này!");
+    }
+  } catch (err) {
+    alert("Lỗi khi lấy dữ liệu chứng chỉ!");
+    console.error(err);
+  }
+};
 
-  const handleSave = () => {
-    console.log('Lưu dữ liệu:', formData);
-    // Xử lý logic lưu ở đây
-  };
+const handleSave = async () => {
+  if (!formData.certificateCode) {
+    alert("Không có mã chứng chỉ để cập nhật!");
+    return;
+  }
+  try {
+    const res = await fetch(
+      `http://localhost:5000/api/thisinhs/${formData.studentId}/chungchis/${formData.certificateCode}`,
+      {
+        method: "POST", // hoặc PATCH nếu backend dùng PATCH
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          LoaiChungChi: formData.certificateType,
+          TrangThai: formData.status,
+          NgayCap: formData.issueDate,
+          NgayNhan: formData.receiveDate,
+          Diem: parseFloat(formData.score),
+          NgayCongBo: formData.publishDate,
+        }),
+      }
+    );
+    const json = await res.json();
+    if (json.success) {
+      alert("Cập nhật thông tin chứng chỉ thành công!");
+    } else {
+      alert("Cập nhật thất bại!");
+    }
+  } catch (err) {
+    alert("Lỗi khi cập nhật chứng chỉ!");
+    console.error(err);
+  }
+};
 
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white">
