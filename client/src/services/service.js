@@ -22,3 +22,22 @@ export const fetchInvoiceById = async (invoiceId) => {
     return { success: false, message: "Lỗi gọi API" };
   }
 };
+
+export const fetchExamSchedules = async (page = 1, limit = 10) => {
+  try {
+    const response = await fetch(`http://localhost:5000/api/lichthi?page=${page}&limit=${limit}`);
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    if (!data.success) {
+      throw new Error(data.message || "Lỗi không xác định từ API");
+    }
+
+    return data.data; // hoặc bạn có thể trả nguyên object nếu muốn lấy cả phân trang
+  } catch (error) {
+    console.error("Error fetching exam schedules:", error);
+    return [];
+  }
+}
