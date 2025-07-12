@@ -6,6 +6,7 @@ import PaymentPage from "./pages/PaymentPage";
 import RenewalCheckPage from "./pages/RenewalCheckPage";
 import CertificateSearchPage from "./pages/CertificateSearchPage"; 
 import ExamSchedulePage from "./pages/ExamSchedulePage";
+import DashBoard from "./pages/DashBoard";
 import "./index.css"; // Ensure you have Tailwind CSS imported
 
 const App = () => {
@@ -18,6 +19,7 @@ const App = () => {
         <Route path="/renewal-check" element={<RenewalCheckPage />} />
         <Route path="/certificate-search" element={<CertificateSearchPage />} />
         <Route path="/exam-schedule" element={<ExamSchedulePage />} />
+        <Route path="/" element={<DashBoard onNavigate={(key) => window.location.pathname = `/${key}`} />} />
       </Routes>
     </Router>
   );
