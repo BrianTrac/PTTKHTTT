@@ -1,5 +1,6 @@
 const sequelize = require("../config/database");
 const { QueryTypes } = require("sequelize");
+const emailService = require("../services/emailService");
 
 const hoaDonService = {
   getHoaDonById: async (maHoaDon) => {
@@ -60,6 +61,37 @@ const hoaDonService = {
       return {
         success: false,
         message: "Lỗi server khi lấy thông tin hóa đơn",
+        error: error.message,
+      };
+    }
+  },
+
+  sendInvoiceEmail: async (maHoaDon, HinhThucThanhToan) => {
+    try {
+      // First, get the invoice data
+      const invoiceResult = await hoaDonService.getHoaDonById(maHoaDon);
+
+      if (!invoiceResult.success) {
+        return invoiceResult;
+      }
+
+      // Check if invoiceResult does not has payment method
+      // then add the default value ZaloPay
+      if (!invoiceResult.data.HinhThucThanhToan) {
+        invoiceResult.data.HinhThucThanhToan = "ZaloPay";
+      }
+
+      // Send the email
+      const emailResult = await emailService.sendInvoiceEmail(
+        invoiceResult.data
+      );
+
+      return emailResult;
+    } catch (error) {
+      console.error("Error in sendInvoiceEmail service:", error);
+      return {
+        success: false,
+        message: "Lỗi server khi gửi email hóa đơn",
         error: error.message,
       };
     }
