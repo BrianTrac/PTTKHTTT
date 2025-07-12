@@ -5,11 +5,15 @@ const router = express.Router();
 const phieuDangKyRoutes = require("./phieuDangKy");
 const thiSinhRoutes = require("./thiSinh");
 const hoaDonRoutes = require("./hoaDon");
+const yeuCauGiaHanRoutes = require("./yeuCauGiaHan");
+const lichThiRoutes = require("./lichThi");
 
 // Use routes
 router.use("/phieudangky", phieuDangKyRoutes);
 router.use("/thisinhs", thiSinhRoutes);
 router.use("/hoadons", hoaDonRoutes);
+router.use("/yeucaugiahan", yeuCauGiaHanRoutes);
+router.use("/lichthi", lichThiRoutes);
 
 // Health
 router.get("/health", (req, res) => {
