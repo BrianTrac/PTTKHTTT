@@ -11,3 +11,14 @@ export async function fetchRegistrations() {
   }
 }
 
+// services/api.js (hoặc nơi bạn tổ chức gọi API)
+export const fetchInvoiceById = async (invoiceId) => {
+  try {
+    const response = await fetch(`http://localhost:5000/api/hoadons/${invoiceId}`);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Lỗi khi gọi API lấy hóa đơn:", error);
+    return { success: false, message: "Lỗi gọi API" };
+  }
+};
