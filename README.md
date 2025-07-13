@@ -1,8 +1,11 @@
-# Cài đặt dependencies
-npm run install:all
+# Docker compose to run MS SQL container & add sample data
+`docker compose up -d`
 
-# Chạy development
-npm run dev
+# Install dependencies
+`npm run install:all`
+
+# Run development for client & server
+`npm run dev`
 
 # Build production
-npm run build
+`npm run build`

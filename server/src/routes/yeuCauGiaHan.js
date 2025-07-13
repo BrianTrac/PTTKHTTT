@@ -8,4 +8,7 @@ router.get("/:id", yeuCauGiaHanController.getYeuCauGiaHanById);
 // POST /api/yeucaugiahan/confirm
 router.post("/confirm", yeuCauGiaHanController.confirmYeuCauGiaHan);
 
+// POST /api/yeucaugiahan/reject
+router.post("/reject", yeuCauGiaHanController.rejectYeuCauGiaHan);
+
 module.exports = router;

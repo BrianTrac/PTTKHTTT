@@ -25,13 +25,38 @@ export default function PaymentInfoInterface() {
     );
   };
 
-  const handleSendEmail = () => {
-    if (selectedPaymentMethods.length === 0) {
-      alert('Vui lòng chọn ít nhất một phương thức thanh toán!');
+  const handleSendEmail = async () => {
+    if (!invoiceId.trim()) {
+      alert('Vui lòng nhập mã hóa đơn!');
       return;
     }
-    setShowNotification(true);
-    setTimeout(() => setShowNotification(false), 3000);
+    if (selectedPaymentMethods.length === 0) {
+      alert('Vui lòng chọn phương thức thanh toán!');
+      return;
+    }
+    const paymentMethod = selectedPaymentMethods[0];
+    try {
+      const res = await fetch(
+        `http://localhost:5000/api/hoadons/${invoiceId}/send-email?HinhThucThanhToan=${paymentMethod}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const json = await res.json();
+      if (json.success) {
+        alert(`Gửi email thành công tới ${json.data.recipient}`);
+        setShowNotification(true);
+        setTimeout(() => setShowNotification(false), 3000);
+      } else {
+        alert(json.message || "Gửi email thất bại!");
+      }
+    } catch (err) {
+      alert("Lỗi khi gửi email!");
+      console.error(err);
+    }
   };
 
   const handleSearch = async () => {
@@ -53,12 +78,12 @@ export default function PaymentInfoInterface() {
 
   // Cập nhật lại thành tiền nếu người dùng thay đổi giảm giá
   useEffect(() => {
-    if (invoiceData) {
-      const soTien = invoiceData.SoTien || 0;
-      const giamGia = parseInt(discount) || 0;
-      setPaymentAmount((soTien - giamGia).toString());
-    }
-  }, [discount, invoiceData]);
+  if (invoiceData) {
+    const soTien = invoiceData.SoTien || 0;
+    const giamGia = parseFloat(discount) || 0;
+    setPaymentAmount((soTien * (1 - giamGia / 100)).toString());
+  }
+}, [discount, invoiceData]);
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-white">

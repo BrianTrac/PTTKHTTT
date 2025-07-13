@@ -227,9 +227,9 @@ GO
 
 -- Insert YeuCauGiaHan data (only for valid exam tickets)
 INSERT INTO YeuCauGiaHan (LyDo, BangChung, PhiGiaHan, SoLanDaGiaHan, NgayYeuCau, TrangThai, MaPhieuDuThi, MaNhanVien, MaDanhSachCho) VALUES
-(N'Bệnh nặng không thể tham gia thi theo lịch đã đăng ký', 'https://res.cloudinary.com/dvzhmi7a9/image/upload/v1752205277/giay-chung-nhan-benh_gmbnm5.png', 200000.00, 0, '2025-08-01', 'Da_duyet', 12, 1, 1),
-(N'Công tác đột xuất của công ty không thể sắp xếp lại', 'https://res.cloudinary.com/dvzhmi7a9/image/upload/v1752205275/lenh-cong-tac_u6ywx4.png', 150000.00, 0, '2025-08-05', 'Da_duyet', 15, 1, 2),
-(N'Visa bị trễ không thể về nước thi đúng lịch', N'Scan hộ chiếu và thông báo từ lãnh sự quán', 300000.00, 0, '2025-08-10', 'Cho_duyet', 17, 1, 3);
+(N'Bệnh nặng không thể tham gia thi theo lịch đã đăng ký', 'https://res.cloudinary.com/dvzhmi7a9/image/upload/v1752205277/giay-chung-nhan-benh_gmbnm5.png', 200000.00, 0, '2025-09-12', 'Cho_duyet', 12, 1, 1),
+(N'Công tác đột xuất của công ty không thể sắp xếp lại', 'https://res.cloudinary.com/dvzhmi7a9/image/upload/v1752205275/lenh-cong-tac_u6ywx4.png', 150000.00, 0, '2025-10-03', 'Cho_duyet', 15, 1, 2),
+(N'Visa bị trễ không thể về nước thi đúng lịch', 'https://res.cloudinary.com/dvzhmi7a9/image/upload/v1752341602/bi-tu-choi-visa-nhat-ban_lspm4x.png', 300000.00, 0, '2025-09-12', 'Cho_duyet', 17, 1, 3);
 GO
 
 -- Insert LichThi_NhanVienCoiThi data (many-to-many relationship)
