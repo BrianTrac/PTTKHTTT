@@ -1,103 +1,135 @@
-import React, { useState } from 'react';
-import { ChevronDown } from 'lucide-react';
+import React, { useState } from "react";
+import { ChevronDown } from "lucide-react";
 
 export default function CertificateSearchForm() {
   const [formData, setFormData] = useState({
-    studentId: '',
-    certificateCode: '',
-    certificateType: '',
-    issueDate: '',
-    receiveDate: '',
-    status: '',
-    score: '',
-    publishDate: ''
+    studentId: "",
+    certificateCode: "",
+    certificateType: "",
+    issueDate: "",
+    receiveDate: "",
+    status: "",
+    score: "",
+    publishDate: "",
   });
 
-  const certificateTypes = [
-    'IELTS',
-    'TOEIC',
-    'SAT',
-    'GRE',
-    'GMAT'
-  ];
+  const [certificates, setCertificates] = useState([]); // Store all certificates for the student
 
-  const statusOptions = [
-    'Da_cap',
-    'Da_nhan',
-    'Bi_thu_hoi'
-  ];
+  // Only show types the user has
+  const certificateTypes = certificates.map((cc) => cc.LoaiChungChi);
+
+  const statusOptions = ["Da_cap", "Da_nhan", "Bi_thu_hoi"];
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
+
+    // If user changes certificateType, update formData to match that certificate
+    if (name === "certificateType") {
+      const selected = certificates.find((cc) => cc.LoaiChungChi === value);
+      if (selected) {
+        setFormData((prev) => ({
+          ...prev,
+          certificateCode: selected.MaChungChi || "",
+          certificateType: selected.LoaiChungChi || "",
+          issueDate: selected.NgayCap || "",
+          receiveDate: selected.NgayNhan || "",
+          status: selected.TrangThai || "",
+          score: selected.Diem?.toString() || "",
+          publishDate: selected.NgayCongBo || "",
+        }));
+      }
+    }
   };
 
   const handleSearch = async () => {
-  if (!formData.studentId) {
-    alert("Vui lòng nhập mã thí sinh!");
-    return;
-  }
-  try {
-    const res = await fetch(`http://localhost:5000/api/thisinhs/${formData.studentId}/chungchis`);
-    const json = await res.json();
-    if (json.success && json.data && json.data.length > 0) {
-      const cc = json.data[0];
-      setFormData(prev => ({
-        ...prev,
-        certificateCode: cc.MaChungChi || "",
-        certificateType: cc.LoaiChungChi || "",
-        issueDate: cc.NgayCap || "",
-        receiveDate: cc.NgayNhan || "",
-        status: cc.TrangThai || "",
-        score: cc.Diem?.toString() || "",
-        publishDate: cc.NgayCongBo || ""
-      }));
-    } else {
-      alert("Không tìm thấy chứng chỉ cho thí sinh này!");
+    if (!formData.studentId) {
+      alert("Vui lòng nhập mã thí sinh!");
+      return;
     }
-  } catch (err) {
-    alert("Lỗi khi lấy dữ liệu chứng chỉ!");
-    console.error(err);
-  }
-};
+    try {
+      const res = await fetch(
+        `http://localhost:5000/api/thisinhs/${formData.studentId}/chungchis`
+      );
+      const json = await res.json();
+      if (json.success && json.data && json.data.length > 0) {
+        setCertificates(json.data); // Store all certificates
 
-const handleSave = async () => {
-  if (!formData.certificateCode) {
-    alert("Không có mã chứng chỉ để cập nhật!");
-    return;
-  }
-  try {
-    const res = await fetch(
-      `http://localhost:5000/api/thisinhs/${formData.studentId}/chungchis/${formData.certificateCode}`,
-      {
-        method: "POST", // hoặc PATCH nếu backend dùng PATCH
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          LoaiChungChi: formData.certificateType,
-          TrangThai: formData.status,
-          NgayCap: formData.issueDate,
-          NgayNhan: formData.receiveDate,
-          Diem: parseFloat(formData.score),
-          NgayCongBo: formData.publishDate,
-        }),
+        // Default to first certificate
+        const cc = json.data[0];
+        setFormData((prev) => ({
+          ...prev,
+          certificateCode: cc.MaChungChi || "",
+          certificateType: cc.LoaiChungChi || "",
+          issueDate: cc.NgayCap || "",
+          receiveDate: cc.NgayNhan || "",
+          status: cc.TrangThai || "",
+          score: cc.Diem?.toString() || "",
+          publishDate: cc.NgayCongBo || "",
+        }));
+      } else {
+        setCertificates([]);
+        alert("Không tìm thấy chứng chỉ cho thí sinh này!");
       }
-    );
-    const json = await res.json();
-    if (json.success) {
-      alert("Cập nhật thông tin chứng chỉ thành công!");
-    } else {
-      alert("Cập nhật thất bại!");
+    } catch (err) {
+      alert("Lỗi khi lấy dữ liệu chứng chỉ!");
+      console.error(err);
     }
-  } catch (err) {
-    alert("Lỗi khi cập nhật chứng chỉ!");
-    console.error(err);
-  }
-};
+  };
+
+  const handleSave = async () => {
+    if (!formData.certificateCode) {
+      alert("Không có mã chứng chỉ để cập nhật!");
+      return;
+    }
+    try {
+      const res = await fetch(
+        `http://localhost:5000/api/thisinhs/${formData.studentId}/chungchis/${formData.certificateCode}`,
+        {
+          method: "POST", // hoặc PATCH nếu backend dùng PATCH
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            LoaiChungChi: formData.certificateType,
+            TrangThai: formData.status,
+            NgayCap: formData.issueDate,
+            NgayNhan: formData.receiveDate,
+            Diem: parseFloat(formData.score),
+            NgayCongBo: formData.publishDate,
+          }),
+        }
+      );
+      const json = await res.json();
+      if (json.success) {
+        alert("Cập nhật thông tin chứng chỉ thành công!");
+        // Update certificates state with new data
+        setCertificates((prevCertificates) =>
+          prevCertificates.map((cc) =>
+            cc.MaChungChi === formData.certificateCode
+              ? {
+                  ...cc,
+                  LoaiChungChi: formData.certificateType,
+                  TrangThai: formData.status,
+                  NgayCap: formData.issueDate,
+                  NgayNhan: formData.receiveDate,
+                  Diem: parseFloat(formData.score),
+                  NgayCongBo: formData.publishDate,
+                }
+              : cc
+          )
+        );
+      } else {
+        alert("Cập nhật thất bại!");
+      }
+    } catch (err) {
+      alert("Lỗi khi cập nhật chứng chỉ!");
+      console.error(err);
+    }
+  };
 
   return (
     <div className="max-w-2xl mx-auto p-6 bg-white">
@@ -105,7 +137,7 @@ const handleSave = async () => {
         <h1 className="text-xl font-bold text-blue-600 text-center mb-6">
           TRA CỨU THÔNG TIN CHỨNG CHỈ
         </h1>
-        
+
         <div className="flex gap-4 mb-6">
           <input
             type="text"
@@ -145,8 +177,10 @@ const handleSave = async () => {
                 onChange={handleInputChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white"
               >
-                {certificateTypes.map(type => (
-                  <option key={type} value={type}>{type}</option>
+                {certificateTypes.map((type) => (
+                  <option key={type} value={type}>
+                    {type}
+                  </option>
                 ))}
               </select>
               <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
@@ -184,8 +218,10 @@ const handleSave = async () => {
                 onChange={handleInputChange}
                 className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 appearance-none bg-white"
               >
-                {statusOptions.map(status => (
-                  <option key={status} value={status}>{status}</option>
+                {statusOptions.map((status) => (
+                  <option key={status} value={status}>
+                    {status}
+                  </option>
                 ))}
               </select>
               <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400 pointer-events-none" />
