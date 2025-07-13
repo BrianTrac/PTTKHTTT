@@ -43,6 +43,9 @@ export default function ViewRegistrationList() {
 						.replace("T", " ")
 						.slice(0, 19),
 					examType: item.LichThi?.TenLichThi || "Không rõ",
+					ngayThi:
+						new Date(item.LichThi.ThoiGianThi).toLocaleDateString("vi-VN") ||
+						"Không rõ",
 					customerCode: item.KhachHang?.MaKhachHang?.toString() || "Không rõ",
 					status: statusInfo,
 					examDate: (item.LichThi?.ThoiGianThi || "")
@@ -127,6 +130,7 @@ export default function ViewRegistrationList() {
 									"Ngày sinh",
 									"Ngày đăng ký",
 									"Kỳ thi",
+									"Ngày thi",
 									"Mã KH",
 									"Trạng thái",
 									"Ngày thi",
@@ -163,6 +167,9 @@ export default function ViewRegistrationList() {
 									</td>
 									<td className="p-3 text-center border-b border-[#e0e7ef]">
 										{item.examType}
+									</td>
+									<td className="p-3 text-center border-b border-[#e0e7ef]">
+										{item.ngayThi}
 									</td>
 									<td className="p-3 text-center border-b border-[#e0e7ef]">
 										{item.customerCode}
