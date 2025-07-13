@@ -6,22 +6,20 @@ import { fetchExamSchedules } from "../services/service"
 export default function ExamSchedulePage() {
   const [examData, setExamData] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
   const rowsPerPage = 5
 
   useEffect(() => {
     const loadData = async () => {
-      const data = await fetchExamSchedules(currentPage, rowsPerPage)
-      setExamData(data)
+      const response = await fetchExamSchedules(currentPage, rowsPerPage)
+      if (response && response.success) {
+        setExamData(response.data || [])
+        setTotalPages(response.pagination?.totalPages || 1)
+      }
     }
 
     loadData()
   }, [currentPage])
-
-  const totalPages = Math.ceil(examData.length / rowsPerPage) || 1
-  const paginatedData = examData.slice(
-    (currentPage - 1) * rowsPerPage,
-    currentPage * rowsPerPage
-  )
 
   const handlePageChange = (newPage) => {
     if (newPage >= 1 && newPage <= totalPages) {
@@ -50,17 +48,22 @@ export default function ExamSchedulePage() {
               </tr>
             </thead>
             <tbody>
-              {paginatedData.map((item, index) => (
+              {examData.map((item, index) => (
                 <tr key={item.MaLichThi || index} className={index % 2 === 0 ? "bg-white" : "bg-[#f1f5fa]"}>
                   <td className="p-3 text-center border-b border-[#e0e7ef]">{item.MaLichThi}</td>
                   <td className="p-3 text-center border-b border-[#e0e7ef]">{item.TenLichThi}</td>
-                  <td className="p-3 text-center border-b border-[#e0e7ef]">{(item.ThoiGianThi || "").slice(0, 10)}</td>
-                  <td className="p-3 text-center border-b border-[#e0e7ef]">{item.SoLuongDangKy || 0}</td>
-                  <td className="p-3 text-center border-b border-[#e0e7ef]">{item.SucChuaToiThieu}</td>
-                  <td className="p-3 text-center border-b border-[#e0e7ef]">{item.SucChuaToiDa}</td>
+                  <td className="p-3 text-center border-b border-[#e0e7ef]">
+                    {new Date(item.ThoiGianThi).toLocaleString("vi-VN", {
+                      dateStyle: "short",
+                      timeStyle: "short"
+                    })}
+                  </td>
+                  <td className="p-3 text-center border-b border-[#e0e7ef]">{item.SoLuongDaDangKi || 0}</td>
+                  <td className="p-3 text-center border-b border-[#e0e7ef]">{item.SoLuongToiThieu}</td>
+                  <td className="p-3 text-center border-b border-[#e0e7ef]">{item.SoLuongToiDa}</td>
                 </tr>
               ))}
-              {paginatedData.length === 0 && (
+              {examData.length === 0 && (
                 <tr>
                   <td colSpan={6} className="text-center py-6 text-gray-500">
                     Không có dữ liệu phù hợp
