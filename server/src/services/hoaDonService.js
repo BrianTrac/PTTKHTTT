@@ -77,9 +77,7 @@ const hoaDonService = {
 
       // Check if invoiceResult does not has payment method
       // then add the default value ZaloPay
-      if (!invoiceResult.data.HinhThucThanhToan) {
-        invoiceResult.data.HinhThucThanhToan = "ZaloPay";
-      }
+      invoiceResult.data.HinhThucThanhToan = HinhThucThanhToan || "ZaloPay";
 
       // Send the email
       const emailResult = await emailService.sendInvoiceEmail(
