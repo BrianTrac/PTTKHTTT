@@ -3,6 +3,20 @@
 import { useEffect, useState } from "react"
 import { fetchRegistrations } from "../services/service"
 
+// Hàm định dạng trạng thái
+const formatStatus = (statusCode) => {
+  switch (statusCode) {
+    case "Cho_duyet":
+      return { label: "Chờ duyệt", color: "bg-yellow-100 text-yellow-800" }
+    case "Da_duyet":
+      return { label: "Đã duyệt", color: "bg-green-100 text-green-800" }
+    case "Tu_choi":
+      return { label: "Từ chối", color: "bg-red-100 text-red-700" }
+    default:
+      return { label: "Không rõ", color: "bg-gray-100 text-gray-700" }
+  }
+}
+
 export default function ViewRegistrationList() {
   const [registrationData, setRegistrationData] = useState([])
   const [searchId, setSearchId] = useState("")
@@ -13,16 +27,20 @@ export default function ViewRegistrationList() {
     const loadData = async () => {
       const rawData = await fetchRegistrations()
 
-      const mappedData = rawData.map((item, index) => ({
-        id: item.ThiSinh?.MaThiSinh?.toString() || `fallback-${index}`,
-        fullName: item.ThiSinh?.Ten || item.KhachHang?.Ten || "Không rõ",
-        birthDate: (item.ThiSinh?.NgaySinh || item.KhachHang?.NgaySinh || "").slice(0, 10),
-        registrationDate: (item.NgayDangKy || "").replace("T", " ").slice(0, 19),
-        examType: item.LichThi?.TenLichThi || "Không rõ",
-        customerCode: item.KhachHang?.MaKhachHang?.toString() || "Không rõ",
-        status: item.TrangThaiThanhToan || "Chưa thanh toán",
-        examDate: (item.LichThi?.ThoiGianThi || "").replace("T", " ").slice(0, 19),
-      }))
+      const mappedData = rawData.map((item, index) => {
+        const statusInfo = formatStatus(item.TrangThai)
+
+        return {
+          id: item.ThiSinh?.MaThiSinh?.toString() || `fallback-${index}`,
+          fullName: item.ThiSinh?.Ten || item.KhachHang?.Ten || "Không rõ",
+          birthDate: (item.ThiSinh?.NgaySinh || item.KhachHang?.NgaySinh || "").slice(0, 10),
+          registrationDate: (item.NgayDangKy || "").replace("T", " ").slice(0, 19),
+          examType: item.LichThi?.TenLichThi || "Không rõ",
+          customerCode: item.KhachHang?.MaKhachHang?.toString() || "Không rõ",
+          status: statusInfo,
+          examDate: (item.LichThi?.ThoiGianThi || "").replace("T", " ").slice(0, 19),
+        }
+      })
 
       setRegistrationData(mappedData)
     }
@@ -104,15 +122,9 @@ export default function ViewRegistrationList() {
                   <td className="p-3 text-center border-b border-[#e0e7ef]">{item.examType}</td>
                   <td className="p-3 text-center border-b border-[#e0e7ef]">{item.customerCode}</td>
                   <td className="p-3 text-center border-b border-[#e0e7ef]">
-                    {item.status === "Đã thanh toán" ? (
-                      <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm">
-                        {item.status}
-                      </span>
-                    ) : (
-                      <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm">
-                        {item.status}
-                      </span>
-                    )}
+                    <span className={`${item.status.color} px-3 py-1 rounded-full text-sm`}>
+                      {item.status.label}
+                    </span>
                   </td>
                   <td className="p-3 text-center border-b border-[#e0e7ef]">{item.examDate}</td>
                 </tr>
