@@ -158,16 +158,16 @@ INSERT INTO PhieuDuThi (SoBaoDanh, NgayPhatHanh, TrangThai, MaPhieuDangKy, MaThi
 -- TOEIC exam tickets
 ('TOE25001', '2025-07-25', 'Da_thi', 1, 1),
 ('TOE25002', '2025-07-25', 'Da_thi', 2, 2),
-('TOE25003', '2025-07-25', 'Da_thi', 3, 3),
-('TOE25004', '2025-07-25', 'Da_thi', 4, 4),
+('TOE25003', '2025-07-25', 'Da_thi', 3, 2),
+('TOE25004', '2025-07-25', 'Da_thi', 4, 2),
 ('TOE25005', '2025-07-25', 'Da_thi', 5, 5),
 -- IELTS exam tickets
-('IEL25001', '2025-07-30', 'Da_thi', 6, 6),
+('IEL25001', '2025-07-30', 'Da_thi', 6, 2),
 ('IEL25002', '2025-07-30', 'Da_thi', 7, 7),
 ('IEL25003', '2025-07-30', 'Da_thi', 8, 8),
 ('IEL25004', '2025-07-30', 'Da_thi', 9, 9),
 -- SAT exam tickets
-('SAT25001', '2025-08-05', 'Da_thi', 10, 10),
+('SAT25001', '2025-08-05', 'Da_thi', 10, 2),
 ('SAT25002', '2025-08-05', 'Da_thi', 11, 11),
 ('SAT25003', '2025-08-05', 'Cho_thi', 12, 12),
 -- GRE exam tickets
