@@ -23,21 +23,14 @@ export const fetchInvoiceById = async (invoiceId) => {
   }
 };
 
-export const fetchExamSchedules = async (page = 1, limit = 10) => {
+export const fetchExamSchedules = async (page = 1, limit = 5) => {
   try {
-    const response = await fetch(`http://localhost:5000/api/lichthi?page=${page}&limit=${limit}`);
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const data = await response.json();
-    if (!data.success) {
-      throw new Error(data.message || "Lỗi không xác định từ API");
-    }
-
-    return data.data; // hoặc bạn có thể trả nguyên object nếu muốn lấy cả phân trang
+    const res = await fetch(`http://localhost:5000/api/lichthi?page=${page}&limit=${limit}`)
+    if (!res.ok) throw new Error("Lỗi khi gọi API")
+    return await res.json()
   } catch (error) {
-    console.error("Error fetching exam schedules:", error);
-    return [];
+    console.error("Lỗi fetchExamSchedules:", error)
+    return { success: false, data: [], pagination: { currentPage: 1, totalPages: 1 } }
   }
 }
+
