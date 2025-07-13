@@ -31,8 +31,8 @@ export default function ViewRegistrationList() {
 				const statusInfo = formatStatus(item.TrangThai);
 
 				return {
+					maPhieuDuThi: item.MaPhieuDangKy?.toString() || "N/A",
 					id: item.ThiSinh?.MaThiSinh?.toString() || `fallback-${index}`,
-					maPhieuDuThi: item.MaPhieuDuThi?.toString() || "N/A",
 					fullName: item.ThiSinh?.Ten || item.KhachHang?.Ten || "Không rõ",
 					birthDate: (
 						item.ThiSinh?.NgaySinh ||
@@ -147,10 +147,10 @@ export default function ViewRegistrationList() {
 									className={index % 2 === 0 ? "bg-white" : "bg-[#f1f5fa]"}
 								>
 									<td className="p-3 text-center border-b border-[#e0e7ef]">
-										{item.id.startsWith("fallback") ? "N/A" : item.id}
+										{item.maPhieuDuThi}
 									</td>
 									<td className="p-3 text-center border-b border-[#e0e7ef]">
-										{item.maPhieuDuThi}
+										{item.id.startsWith("fallback") ? "N/A" : item.id}
 									</td>
 									<td className="p-3 text-center border-b border-[#e0e7ef]">
 										{item.fullName}
