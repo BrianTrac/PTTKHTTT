@@ -42,3 +42,4 @@ const Dashboard = ({ onNavigate }) => {
 };
 
 export default Dashboard;
+// #add the following line to the end of the file
